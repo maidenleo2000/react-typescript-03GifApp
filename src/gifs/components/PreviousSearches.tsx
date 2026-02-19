@@ -11,9 +11,9 @@ interface Props {
 // export const PreviousSearches = ({ searches }: Props) => {
 export const PreviousSearches: FC<Props> = ({ searches, onLabelClicked }) => {
   return (
-    <div className="previus-searches">
-      <h2>{searches}</h2>
-      <ul className="previus-searches-list">
+    <div className="previous-searches">
+      <h2 style={{ marginBottom: "10px" }}>Búsquedas previas</h2>
+      <ul className="previous-searches-list">
         {searches.map((term) => (
           <li key={term} onClick={() => onLabelClicked(term)}>
             {term}

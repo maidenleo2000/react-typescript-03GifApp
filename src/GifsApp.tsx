@@ -14,7 +14,7 @@ export const GifsApp = () => {
   const [gifs, setGifs] = useState<Gif[]>([]);
 
   const handleTermClicked = (term: string) => {
-    console.log({ term });
+    handleSearch(term);
   };
 
   const handleSearch = async (query: string = "") => {
