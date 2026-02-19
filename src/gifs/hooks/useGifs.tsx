@@ -1,13 +1,31 @@
-import { useState } from "react";
+import { useRef, useState } from "react";
 import type { Gif } from "../interfaces/gif.interface";
 import { getGifsByQuery } from "../actions/get-gifs-by-query.action";
+
+//TODO pedir al agente que explique esto
+//onst gifsCache: Record<string, Gif[]> = {};
 
 export const useGifs = () => {
   const [gifs, setGifs] = useState<Gif[]>([]);
   const [previousTerms, setPreviousTerms] = useState<string[]>([]);
 
-  const handleTermClicked = (term: string) => {
-    handleSearch(term);
+  //crea espacio en memoria que no causa rerender y mantiene el estado de memoria anterior
+  const gifsCache = useRef<Record<string, Gif[]>>({});
+
+  //TODO forma propuesta por Agent
+  //   const handleTermClicked = (term: string) => {
+  //     handleSearch(term);
+  //   };
+
+  //TODO forma hecha por DevTalles
+  const handleTermClicked = async (term: string) => {
+    if (gifsCache.current[term]) {
+      //el .current apunta al estado actual
+      setGifs(gifsCache.current[term]);
+      return;
+    }
+    const gifs = await getGifsByQuery(term);
+    setGifs(gifs);
   };
 
   const handleSearch = async (query: string = "") => {
@@ -26,8 +44,12 @@ export const useGifs = () => {
       }
     }
     const gifs = await getGifsByQuery(queryClean);
-    console.log({ gifs });
+    // console.log({ gifs });
     setGifs(gifs);
+
+    //TODO pedir al agente que explique esto
+    gifsCache.current[query] = gifs;
+    console.log(gifsCache);
   };
   return {
     //Props
